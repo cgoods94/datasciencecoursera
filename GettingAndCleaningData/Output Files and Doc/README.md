@@ -25,9 +25,13 @@ and converts **full** into a tbl object (dplyr).
 ### 2. Extract
 
 Here the script uses regular expressions and grep on the feature names to determine which columns
-hold the variables for mean and std. It then selects those columns from **full** and saves
+hold the variables for mean() and std(). It then selects those columns from **full** and saves
 the result to a new tbl, **extracted**. Before moving on, it makes a character vector of the
 mean and std feature names called **choiceColNames** for later use in the Label step.
+
+**NOTE:** *Columns with meanFreq() were NOT included in the final dataset because we have both
+time and frequency domain data, so the meanFreq should be present in frequency domain if you
+really need it.*
 
 ### 3. Factorize
 
