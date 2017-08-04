@@ -41,7 +41,7 @@ names in the tidy data set. Each variable name is a permutation of up to four de
      * *GravityAcc* - acceleration due to gravity
      * *BodyAccJerk* - the change in acceleration of the subject's body
      * *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
-     * *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
+     * *BodyGyroJerk* - the change in angular acceleration of the smartphone as recorded by the gyroscope
 
     *For more information regarding these measurements, please see features_info.txt in the raw dataset .zip*
 
@@ -67,7 +67,7 @@ Magnitude variables, which are derived from the three axial variables take a sli
 
 > \[Domain\]\[Measurement\]\["Mag"\]\[StatisticalValue\]
 
-**Example:** \[freq\] + \[BodyGyroJerk\] + \["Mag"\] + \[StDev\] => **freqBodyGyroJerkMagStDev (column 68)
+> **Example:** \[freq\] + \[BodyGyroJerk\] + \["Mag"\] + \[StDev\] => **freqBodyGyroJerkMagStDev** (column 68)
 
 
 
