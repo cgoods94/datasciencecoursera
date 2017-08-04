@@ -20,10 +20,13 @@ embedded accelerometer and gyroscope, making it able to capture 3-dimensional li
 velocity. The signals from the accelerometer and gyroscope were also processed to yield variables in the time 
 and frequency domains.
 
+The first two variable names in the dataset, **subject** and **activity**, refer to the number ID
+assigned to the subject performing the activity and said activity, respectively.
+
 ### Feature Variables - Format
 
-There are two forms for the descriptive feature names in the tidy data set. Each variable name is a permutation of up to
-four descriptors:
+The remaining variables are features of the smartphone's sensors. There are two forms for the descriptive feature
+names in the tidy data set. Each variable name is a permutation of up to four descriptors:
 
 1. **Domain:** whether the variable is in the time or frequency domain
 
@@ -40,6 +43,8 @@ four descriptors:
      * *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
      * *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
 
+    *For more information regarding these measurements, please see features_info.txt in the raw dataset .zip*
+
 3. **StatisticalValue:** the statistical value of the measurement taken
  	
 	Possible values:
@@ -54,9 +59,15 @@ Axial variable names will end with an X, Y, or Z and take the following form:
 
 > \[Domain\]\[Measurement\]\[StatisticalValue \]\[Axis\]
 
+**Example:** 
+
+> \[time\] + \[BodyAcc\] + \[Mean\] + \[X\] => **timeBodyAccMeanX** (column 3)
+
 Magnitude variables, which are derived from the three axial variables take a slightly different form:
 
 > \[Domain\]\[Measurement\]\["Mag"\]\[StatisticalValue\]
+
+**Example:** \[freq\] + \[BodyGyroJerk\] + \["Mag"\] + \[StDev\] => **freqBodyGyroJerkMagStDev (column 68)
 
 
 
