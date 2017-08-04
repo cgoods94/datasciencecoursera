@@ -61,9 +61,9 @@ saves it to the Output Files and Doc folder.
 The run_analysis script pulls the UCI HAR dataset into R, merges the test and training datasets,
 extracts only the mean and std variables, factorizes the activity IDs for each observation, gives
 the feature variables descriptive names, averages all of the variables by each subject-activity
-combination, and writes the output to tidy.txt in the Output Files and Doc folder of the working
+combination, and writes the output to **tidy.txt** in the Output Files and Doc folder of the working
 directory.
 
-
+### For more detailed descriptions of the data set and its variables, please read **codebook.md**.
 
 
