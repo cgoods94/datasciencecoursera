@@ -69,6 +69,13 @@ Magnitude variables, which are derived from the three axial variables take a sli
 
 > **Example:** \[freq\] + \[BodyGyroJerk\] + \["Mag"\] + \[StDev\] => **freqBodyGyroJerkMagStDev** (column 68)
 
+### Units
 
+**All features have been normalized within[-1,1].**
+
+However, for the curious: 
+
+The Samsung Galaxy S II records acceleration in standard gravity units **'g'**, while the gyroscope records angular 
+velocity in radians per second.
 
 
