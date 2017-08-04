@@ -86,6 +86,7 @@ run_analysis <- function()
     choiceColNames <- sub("\\-std\\(\\)\\-?", "StDev", choiceColNames)
     choiceColNames <- sub("^t", "time", choiceColNames)
     choiceColNames <- sub("^f", "freq", choiceColNames)
+    choiceColNames <- sub("BodyBody", "Body", choiceColNames)
     
     colnames(described)[3:68] <- choiceColNames
     
