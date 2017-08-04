@@ -46,10 +46,16 @@ of the joined factor names. The result of all of this is saved to a new tbl, **d
 ### 4. Label
 
 To appropriately label the data set with descriptive label names, the script then cleans up the
-strings in **choiceColNames**. Specifically, the script uses two more regular expressions and the
-sub function to a) remove all non-alphabet characters from the variable names and camelcase the
-remaining characters and b) convert the "t" or "f" at the beginning of each variable name to
-"time" or "freq", respectively. Once the variable names are clean, the script adds these column
+strings in **choiceColNames**. Specifically, the script uses three more regular expressions and the
+sub function to:
+
+* remove all non-alphabet characters from the variable names and camelcase the
+	remaining characters, 
+* convert the "t" or "f" at the beginning of each variable name to
+	"time" or "freq", respectively, and:
+* fix an odd convention of the raw dataset where the word "Body" is doubled as "BodyBody" in feature names.
+
+Once the variable names are clean, the script adds these column
 names to **described** columns 3-68.
 
 ### 5. Summarize
