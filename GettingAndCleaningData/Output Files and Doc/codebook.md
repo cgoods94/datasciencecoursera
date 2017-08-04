@@ -27,21 +27,22 @@ four descriptors:
 
  1. **Domain:** whether the variable is in the time or frequency domain
  	Possible values:
- 		a. *time* - the time domain
- 		b. *freq* - the frequency domain
+ 	  * *time* - the time domain
+ 	  * *freq* - the frequency domain
 
  2. **Measurement:** the physical measurement taken by the smartphone
- 	Possible values: 
- 		a. *BodyAcc* - acceleration of the subject's body subtracting gravity acceleration
- 		b. *GravityAcc* - acceleration due to gravity
- 		c. *BodyAccJerk* - the change in acceleration of the subject's body
- 		d. *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
- 		e. *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
+ 	
+   Possible values: 
+   * *BodyAcc* - acceleration of the subject's body subtracting gravity acceleration
+   * *GravityAcc* - acceleration due to gravity
+   * *BodyAccJerk* - the change in acceleration of the subject's body
+   * *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
+   * *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
 
  3. **StatisticalValue:** the statistical value of the measurement taken
  	Possible values:
- 		a. *Mean* - the mean of the measurement taken on the subject performing the specified activity.
- 		b. *StDev* - the standard deviation of the measurement taken on the subject performing the specified activity.
+ 	  * *Mean* - the mean of the measurement taken on the subject performing the specified activity.
+ 	  * *StDev* - the standard deviation of the measurement taken on the subject performing the specified activity.
 
  4. **Axis (axial features only):** the axis on which the measurement is taken
  	Possible values: X, Y, and Z.
