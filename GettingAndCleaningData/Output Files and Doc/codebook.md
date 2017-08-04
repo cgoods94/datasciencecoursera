@@ -25,26 +25,29 @@ and frequency domains.
 There are two forms for the descriptive feature names in the tidy data set. Each variable name is a permutation of up to
 four descriptors:
 
- 1. **Domain:** whether the variable is in the time or frequency domain
- 	Possible values:
+1. **Domain:** whether the variable is in the time or frequency domain
+
+	Possible values:
  	  * *time* - the time domain
  	  * *freq* - the frequency domain
 
- 2. **Measurement:** the physical measurement taken by the smartphone
+2. **Measurement:** the physical measurement taken by the smartphone
  	
-   Possible values: 
-   * *BodyAcc* - acceleration of the subject's body subtracting gravity acceleration
-   * *GravityAcc* - acceleration due to gravity
-   * *BodyAccJerk* - the change in acceleration of the subject's body
-   * *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
-   * *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
+   	Possible values: 
+     * *BodyAcc* - acceleration of the subject's body subtracting gravity acceleration
+     * *GravityAcc* - acceleration due to gravity
+     * *BodyAccJerk* - the change in acceleration of the subject's body
+     * *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
+     * *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
 
- 3. **StatisticalValue:** the statistical value of the measurement taken
- 	Possible values:
+3. **StatisticalValue:** the statistical value of the measurement taken
+ 	
+	Possible values:
  	  * *Mean* - the mean of the measurement taken on the subject performing the specified activity.
  	  * *StDev* - the standard deviation of the measurement taken on the subject performing the specified activity.
 
- 4. **Axis (axial features only):** the axis on which the measurement is taken
+4. **Axis (axial features only):** the axis on which the measurement is taken
+
  	Possible values: X, Y, and Z.
 
 Axial variable names will end with an X, Y, or Z and take the following form:
