@@ -76,6 +76,6 @@ Magnitude variables, which are derived from the three axial variables take a sli
 However, for the curious: 
 
 The Samsung Galaxy S II records acceleration in standard gravity units **'g'**, while the gyroscope records angular 
-velocity in radians per second.
+velocity in **radians per second.**
 
 
