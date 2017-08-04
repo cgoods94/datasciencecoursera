@@ -11,8 +11,6 @@ at Università degli Studi di Genova in Genoa, Italy. UC Irvine's Web page for t
 be found [here,](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 while the .zip file of said data can be found [here.](http://archive.ics.uci.edu/ml/machine-learning-databases/00240/UCI%20HAR%20Dataset.zip)
 
-**IMPORTANT:** 
-
 ### Overview
 
 The experiments that yielded this data involved 30 subjects (ages 19-48) performing six different activities
@@ -22,17 +20,39 @@ embedded accelerometer and gyroscope, making it able to capture 3-dimensional li
 velocity. The signals from the accelerometer and gyroscope were also processed to yield variables in the time 
 and frequency domains.
 
-### Variable Name Format
+### Feature Variables - Format
 
-There are two forms for the descriptive variable names in the tidy data set.
+There are two forms for the descriptive feature names in the tidy data set. Each variable name is a permutation of up to
+four descriptors:
 
-Axial variables will end with an X, Y, or Z and take the following form:
+ 1. **Domain:** whether the variable is in the time or frequency domain
+ 	Possible values:
+ 		a. *time* - the time domain
+ 		b. *freq* - the frequency domain
 
-\[Domain\]\[Measurement\]\[StatisticalValue \]\[Axis\]
+ 2. **Measurement:** the physical measurement taken by the smartphone
+ 	Possible values: 
+ 		a. *BodyAcc* - acceleration of the subject's body subtracting gravity acceleration
+ 		b. *GravityAcc* - acceleration due to gravity
+ 		c. *BodyAccJerk* - the change in acceleration of the subject's body
+ 		d. *BodyGyro* - the angular velocity of the smartphone as recorded by the gyroscope
+ 		e. *BodyGyroJerk* - the change in angular acceleration of the smartphone as record by the gyroscope
+
+ 3. **StatisticalValue:** the statistical value of the measurement taken
+ 	Possible values:
+ 		a. *Mean* - the mean of the measurement taken on the subject performing the specified activity.
+ 		b. *StDev* - the standard deviation of the measurement taken on the subject performing the specified activity.
+
+ 4. **Axis (axial features only):** the axis on which the measurement is taken
+ 	Possible values: X, Y, and Z.
+
+Axial variable names will end with an X, Y, or Z and take the following form:
+
+> \[Domain\]\[Measurement\]\[StatisticalValue \]\[Axis\]
 
 Magnitude variables, which are derived from the three axial variables take a slightly different form:
 
-\[Domain\]\[Measurement\]\[Mag\]\[statistical value\]
+> \[Domain\]\[Measurement\]\["Mag"\]\[StatisticalValue\]
 
 
 
