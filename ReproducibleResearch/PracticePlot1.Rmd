@@ -1,0 +1,47 @@
+---
+title: "Plotting Practice - Part 1"
+author: "Connor Gooding"
+date: "8/22/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+## Overview
+
+This report illustrates the relationship between average covered charges and total payments made by inpatients through the Inpatient Prospective Payment System (IPPS) for the top 100 Diagnosis-Related Groups in the state of New York.
+
+## Obtaining the Processed Data
+
+The data comes in a processed csv file named payments.csv. This data contains information about the IIPS for six different states (California, Florida, Illinois, New York, Pennsylvania, and Texas).
+
+```{r get_data}
+    payments <- read.csv('payments.csv')
+```
+
+## Subsetting the Data
+
+To isolate just the  data pertaining to New York state, the data must be subsetted.
+
+```{r subset}
+    NYpayments <- subset(payments, Provider.State == "NY")
+```
+
+## Plot
+
+The following plot illustrates the relationship between mean covered charges and mean total payments in New York.
+
+```{r plot1}
+    g <- ggplot(data = NYpayments, aes(x = Average.Total.Payments, 
+                                       y = Average.Covered.Charges))
+    g + geom_point( alpha = 0.3 ) + geom_smooth(method = lm) + 
+        ggtitle("Mean Covered Charges vs. Mean Total Payments - New York State") +
+        xlab("Total Payments") + ylab("Covered Charges") + 
+        scale_x_continuous( labels = scales::comma ) +
+        scale_y_continuous( labels = scales::dollar )
+```
+
+From this graph, it can be determined that there is a strong and positive linear correlation between mean covered charges and mean total payments in the state of New York.
+

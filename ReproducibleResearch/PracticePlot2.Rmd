@@ -1,0 +1,57 @@
+---
+title: "Plotting Practice - Part 2"
+author: "Connor Gooding"
+date: "8/22/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+## Overview
+
+This report illustrates the relationship between average covered charges and total payments made by inpatients through the Inpatient Prospective Payment System (IPPS) for the top 100 Diagnosis-Related Groups in the state of New York.
+
+## Obtaining the Processed Data
+
+The data comes in a processed csv file named payments.csv. This data contains information about the IIPS for six different states (California, Florida, Illinois, New York, Pennsylvania, and Texas) and six different medical condition categories: 
+
+* 194 - Simple Pnuemonia & Pleurisy w/ CC
+* 292 - Heart Failure & Shock w/ CC 
+* 392 - Esophagitis, Gastroent. & Misc. Digest Disorders w/o MCC
+* 641 - Misc Disorders of Nutrition, Metabolism, Fluids/Electrolytes w/o MCC
+* 690 - Kidney & Urinary Tract Infections w/o MCC
+* 871 - Septicemia or Severe Sepsis w/o MV 96+ Hours w/o MCC)
+
+```{r get_data}
+    payments <- read.csv('payments.csv')
+```
+
+## Cleaning the Processed Data
+
+The medical condition categories are going to be too verbose for the facet grid, so the factor names must be adjusted to just display the number.
+
+```{r factor_reduce}
+    abbr_payments <- payments
+    abbr_payments$DRG.Definition <- sub(" - (.*)$", "", abbr_payments$DRG.Definition)
+```
+
+## Plot
+
+The following plot illustrates the relationship between mean covered charges and mean total payments in New York.
+
+```{r plot1}
+    g <- ggplot(data = abbr_payments, aes(x = Average.Total.Payments / 1e3, 
+                                     y = Average.Covered.Charges / 1e3 )) +
+         facet_grid(DRG.Definition ~ Provider.State)
+
+    g + geom_point( alpha = 0.1 ) + geom_smooth(method = lm, se = F) + 
+        ggtitle("Mean Covered Charges vs. Mean Total Payments (across State and Condition)", ) +
+        xlab("Total Payments (in thousands)") + ylab("Covered Charges (in thousands)") +
+        scale_x_continuous( labels = scales::comma ) +
+        scale_y_continuous( labels = scales::dollar ) +
+        theme(plot.title = element_text(size = 11, face = "bold"))
+```
+
+Several observations can be made on this multi-panel graph. The most obvious observation is that treatment for condition 871 (Septicemia or Severe Sepsis w/o MV 96+ Hours w/o MCC) has greater variation and a higher cost than the other conditions. Another observation one might make is that Pennsylvania seems to have steeper costs for treatment across all six conditions in comparison to the other states.
