@@ -1,0 +1,19 @@
+---
+title: 'Reproducible Research: Peer Assessment 2'
+author: "Connor Gooding"
+date: "8/25/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Synopsis
+
+## Data Processing
+
+## Other Stuff
+
+## Results
+
