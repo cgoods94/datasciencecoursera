@@ -118,7 +118,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Reproducible Research: Peer Assessment 2</h1>
 <h4 class="author"><em>Connor Gooding</em></h4>
-<h4 class="date"><em>8/25/2017</em></h4>
+<h4 class="date"><em>8/28/2017</em></h4>
 
 </div>
 
@@ -172,6 +172,7 @@ FStormData &lt;- FStormData %&gt;% select(YEAR, EVTYPE, FATALITIES,
 <pre class="r"><code>length(unique(FStormData$EVTYPE))</code></pre>
 <pre><code>## [1] 516</code></pre>
 <p>The solution to this is to simply do the best we can to wrangle these erroneous event types into the set of valid event types and eliminate those that cannot be classified. This is accomplished by initially running through a series of regular expression calls, then approximately matching the remaining offenders to the set of event types.</p>
+<p>To accomplish this portion of the data transformation process, an additional .csv file was included into the project. It can be found <a href="https://github.com/cgoods94/datasciencecoursera/tree/master/ReproducibleResearch/RepData_PeerAssessment2">here</a></p>
 <pre class="r"><code>## Load the list of official event types (I created this and included it in the repo).
 EventTypes &lt;- read.csv('EventTypes.csv')
 
