@@ -10,6 +10,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(R.utils)
+library(datasets)
 library(dplyr)
 library(data.table)
 library(stringdist)
@@ -41,16 +42,17 @@ FStormDataRaw <- as.data.frame(fread('FStormData.csv'))
 
 ### Subsetting the Data
 
-To make the cleaning process easier and more sensible, only observations from 1996 onward are going to be used in the analysis. This is because 1996 was the first year that the National Weather Service started to record all 48 of the current event types.
+To make the cleaning process easier and more sensible, only observations from 1996 onward are going to be used in the analysis. This is because 1996 was the first year that the National Weather Service started to record all 48 of the current event types. To make the analysis more useful for municipal managers and state governors, only storms that occurred within the 50 US states will be considered.
 
 Of the 37 variables presented in the raw data, only 8 of them will be useful in answering the questions posed for this analysis. They are: Year, Event Type, Fatalities, Injuries, Property Damage, Property Damage Exponent, Crop Damage, and Crop Damage Exponent (and the exponent columns will be eliminated shortly).
 
 ```{r subset_data}
 FStormData <- FStormDataRaw
+data(state)
 FStormData$BGN_DATE <- format(as.Date(sub(' [0-9]:[0-9][0-9]:[0-9][0-9]$',
                                     '', FStormData$BGN_DATE), 
                                 format = "%m/%d/%Y"), "%Y")
-FStormData <- FStormData %>% filter(BGN_DATE >= 1996) %>%
+FStormData <- FStormData %>% filter(BGN_DATE >= 1996, STATE %in% state.abb) %>%
               select(2, 8, 23:28)
 names(FStormData)[1] <- "YEAR"
 
@@ -133,7 +135,7 @@ FStormDataClean <- FStormData %>% filter(!(is.na(EVTYPE)))
 
 ### Across the United States, which types of events are most harmful with respect to population health?
 
-The most harmful events with respect to population health will be defined as the ones that have the highest yearly fatality and/or injury rates. Summing together fatalities and injuries and finding the mean across all years since 1996, the top five most dangerous weather events overall are:
+The most harmful events with respect to population health will be defined as the ones that have the highest yearly casualty rates. Summing together fatalities and injuries and finding the mean across all years since 1996, the following barplot lists the five events with the highest yearly casualty rates.
 
 ```{r hurricane_ditka}
 Casualties <- FStormDataClean %>% group_by(EVTYPE, YEAR) %>% 
@@ -148,9 +150,11 @@ ggplot(data = head(Casualties, 5),
        theme(axis.text.x = element_text(angle=30, hjust=1)) 
 ```
 
+From the barplot, it appears that tornadoes are definitively responsible for the highest yearly casualty rate of all storms in the 50 US states since 1996 with almost 1500 casualties a year. Following farther behind, excessive heat, floods, thunderstorm winds, and lightning are the next most dangerous storm events.
+
 ### Across the United States, which types of events have the greatest economic consequences?
 
-The most economically disatrous weather events will be the ones that do the most yearly damage to crops and/or property. Summing together crop and propety damages and finding the mean across all years since 1996, the top five most economically consequential weather events in the US have been:
+The most economically disatrous weather events will be the ones that do the most yearly damage to crops and/or property. Summing together crop and propety damages and finding the mean across all years since 1996, the following barplot lists the five events with the highest yearly damage costs.
 
 ```{r oh_no_my_stuff}
 AllDamages <- FStormDataClean %>% group_by(EVTYPE, YEAR) %>% 
@@ -165,4 +169,10 @@ ggplot(data = head(AllDamages, 5),
        theme(axis.text.x = element_text(angle=30, hjust=1)) 
 ```
 
+From this barplot, it is evident that flooding is responsible for the most economic damage yearly, with almost $10B in combined crop and property damage per year. Hurricanes and typhoons come in second with just over $6.25B, with storm tides, tornadoes, and hail rounding out the top five.
 
+## Conclusions
+
+Based on the first barplot, tornadoes have been the most hazardous weather events to public health in the United States over the past two decades. Tornadoes have been responsible for almost 1500 annual casualties since 1996, more than double that of the next most dangerous weather event, excessive heat. Following tornadoes and excessive heat, the next three most dangerous weather events were floods, thunderstorm winds, and lightning.
+
+Based on the second barplot, floods have been the most economically costly weather events in the United States over the past two decades. Floods have been responsible for over 9 billion dollars of damage to crops and property per year, eclipsing the combined economic effect of hurricanes and typhoons per year. Following floods and hurricanes/typhoons, the next three most costly weather events annually were storm tides, tornadoes, and hail.
