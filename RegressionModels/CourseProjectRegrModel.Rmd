@@ -1,0 +1,106 @@
+---
+title: "Effect of Transmission Type on MPG"
+author: "Connor Gooding"
+date: "9/7/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+## Executive Summary
+
+When isolated from car weight (in tons) and number of cylinder pairs in the engine, **transmission type has no significant impact on fuel efficiency.** While the average manual-transmission car gets 7 miles per gallon more than the average automatic-transmission car, this variance is largely explained by the fact that automatic cars are heavier and have more cylinders in their engines than manual cars. Because the transmission type on fuel efficiency is not significant, it is not possible to quantify the MPG difference.
+
+## Analysis
+
+### Dataset
+
+The `mtcars` dataset provides the data used for the study. It is found by default in R's datasets library and contains 11 different variables on 32 different car models observed in 1974 by *Motor Trend* magazine.
+
+```{r get_data}
+library(datasets)
+data(mtcars)
+mtcars$vs <- as.logical(mtcars$vs)
+mtcars$am <- factor(mtcars$am, labels = c("Automatic", "Manual"))
+```
+
+### Simplest Regression
+
+At first glance, it would seem that manual transmission would provide a significant
+advantage, as the mean mpg for manual cars in the datasets is a full 7 miles per gallon higher than the mean mpg for automatic cars. 
+
+```{r over_simple}
+over_simple <- lm(mpg ~ am, data = mtcars)
+summary(over_simple)$coefficients
+```
+
+However, this model is overly simplistic and fails to account for any confounding variables.
+
+### Selecting the Right Model
+
+After some exploratory analysis, it becomes evident that weight of the vehicle and pairs of cylinders in the engine confound transmission type as a predictor for MPG. 
+
+```{r add_weight}
+with_wt <- lm(mpg ~ am + I(wt / 2), mtcars)
+best_fit <- lm(mpg ~ am + I(wt / 2) * I(cyl / 2), mtcars)
+anova(over_simple, with_wt, best_fit)
+```
+
+The analysis of variance between the simple model and one including the weight of the car shows determines that weight is extremely necessary to include as a predictor. Pairs of cylinders is also an important regressor, to a lesser extent than weight but still well within the $\alpha = 0.05$ threshold of significance. The interaction between weight and number of cylinders is also significant enough to include as its own term.
+
+In the Appendix, additional exploratory data analysis is shown to prove that horsepower, quarter mile time, and number of carburetors come close but do not qualify as significant enough for inclusion in the final model ("Honorable Mention Predictors").
+
+## Residual Analysis
+
+The residual vs. fitted plot for this three-predictor model is provided in the Appendix ("Residual Plot"). Overall, the residuals do not appear to have a pattern, which suggests that this model is probably a good fit of fuel efficiency. In quantifiable terms, the three-predictor model describes 86% of the variance found in the data.
+
+From this plot, it is evident that there are three cars in the dataset that could be considered outliers to the model. Of these three cars, the Toyota Corolla and Fiat 128 outperform the predictions by more than 2 standard deviations, while the Toyota Corona underperforms by more than 2 standard deviations. 
+
+```{r outliers}
+rstudent(best_fit)[c("Fiat 128", "Toyota Corolla", "Toyota Corona")]
+
+```
+
+## Conclusions
+
+After analyzing all of the available predictors for fuel efficiency, it is evident that transmission type has no significant relationship with fuel efficiency when isolated from car weight and number of cylinders. The aforemontioned additional variables are not only key confounding variables, but they also serve as the two best predictors of fuel efficiency in the dataset.
+
+As far as transmission type alone, it is not possible to reject the null hypothesis that transmission choice has zero impact on fuel efficiency. In fact, 0 is well within the confidence interval for its slope. 
+
+```{r confint}
+confint(best_fit)[2,]
+```
+
+The full summary for the final model is provided in the Appendix ("Full Summary of Model").
+
+\newpage
+
+## Appendix
+
+### Honorable Mention Predictors 
+
+Of all the variables not included in the final model, horsepower (hp), quarter mile time (in seconds), and number of carburetors come the closest to being significant predictors to include with weight and pairs of cylinders, falling between $\alpha = .10$ and $\alpha = .05$ when included as additional regressors.
+
+```{r overfitting}
+with_qsec <- update(best_fit, mpg ~ am + I(wt * .5) + I(cyl/2) + qsec, mtcars)
+with_hp <- update(best_fit, mpg ~ am + I(wt * .5) + I(cyl/2) + hp, mtcars)
+with_carb <- update(best_fit, mpg ~ am + I(wt * .5) + I(cyl/2) + carb, mtcars)
+anova(best_fit, with_qsec)[2,]
+anova(best_fit, with_hp)[2,]
+anova(best_fit, with_carb)[2,]
+```
+
+### Residual Plot
+
+```{r residual_analysis}
+plot(best_fit, which = 1)
+```
+
+### Full Summary of Model
+
+```{r best_fit}
+summary(best_fit)
+```
