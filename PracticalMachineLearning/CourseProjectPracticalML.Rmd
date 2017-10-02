@@ -1,0 +1,113 @@
+---
+title: "Predicting Proper Form in Exercise Using Wearable Data and Random Forest"
+author: "Connor Gooding"
+date: "9/21/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+library(ggplot2)
+library(caret)
+library(randomForest)
+library(dplyr)
+```
+
+## About The Data
+
+This report uses data on Qualitative Activity Recognition of Weight Living Exercises taken by Groupware\@LES to predict whether or not a subject exercising with dumbbells is doing so with the proper form or failing to meet proper form in one of four common ways. Six subjects performed Unilateral Dumbbell Curls while wearing four inertial measurement units (IMU's). These four units were attached to the belt, arm, forearm, and dumbbell of each subject as they performed the exercises.
+
+The raw data comes in a training set and a test set. These are loaded into R in the following code block:
+
+```{r get_data, hide = T}
+train_url <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+test_url <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+if(!file.exists("data/pml_training.csv"))
+{
+    download.file(train_url, destfile = "data/pml_training.csv")
+}
+
+if(!file.exists("data/pml_testing.csv"))
+{
+    download.file(test_url, destfile = "data/pml_testing.csv")
+}
+
+train.raw <- read.csv("data/pml_training.csv")
+validation <- read.csv("data/pml_testing.csv")
+```
+
+## Splitting the Data
+
+To prepare a training model, one must partition the raw training data into a training set and testing set. This leaves the raw test set as a validation set and allows for reformulation of the trained model before submitting any final predctions. For this particular model, 70% of the raw training data was used to train the model while the remaining 30% was withheld to test the trained model.
+
+```{r split_data}
+inTrain <- createDataPartition(train.raw$classe, p = .7)[[1]]
+training <- train.raw[inTrain,]
+testing <- train.raw[-inTrain,]
+```
+
+## Feature Selection
+
+The raw dataset comes with 160 columns, as this is how many features the IMU's capture when running. However, many of these features were captured too sparsely to be of any use in training a prediction model. These sparse columns, which are more than 90% blank or error-filled, are discarded here.
+
+```{r remove_sparse}
+sparseCols <- which(apply(training, 2, function(x) mean(is.na(x) | (x == ""))) > .9)
+training <- training[,-sparseCols]
+testing <- testing[,-sparseCols]
+validation <- validation[,-sparseCols]
+```
+
+Of the remaining 60 features, 7 more of them should not be used to predict future activity classes. The user's name or what time of day they performed the activity should not factor into whether or not the user is performing the activity correctly in an arbritrary moment in time. In fact, the timestamp data's strong relationship to the activity class is simply an artifact of the experiment structure. 
+
+The windowing features are merely metadata taken by the IMU's that would serve better for an exploratory analysis of this data, but not for a true predictive analysis. These should also be discarded.
+
+```{r remove_useless}
+boringCols <- c(1:7)
+training <- training[,-boringCols]
+testing <- testing[,-boringCols]
+validation <- validation[,-boringCols]
+```
+
+## Prediction
+
+While several training algorithms taught in this class could be used to train a model, using a random forest returns $>99\%$ accuracy. Other methods, such as linear discriminant analysis and gradient boosting, take a lot of time and report space without ultimately improving the accuracy of the model. Therefore, the random forest algorithm alone is used to predict activity class.
+
+```{r random_forest}
+mdlRF <- randomForest(classe ~ ., data = training, method = 'class')
+mdlRF
+```
+
+## Testing
+
+Applying the random forest model on the testing data yields $99.3\%$ accuracy. More specifically, the random forest model has a $99.8\%$ positive predictive value of correct form (class A) and specificity $>99.5\%$ for all five activity classes. This accuracy should be more than satisfactory to expect perfect prediction for the 20 observations in the validation dataset.
+
+```{r testing}
+pred <- predict(mdlRF, newdata = testing)
+confusionMatrix(testing$classe, pred)
+```
+
+## Validation
+
+The following output shows the 20 predictions made on the validation set by the random forest model.
+
+```{r validate}
+validation$classe <- predict(mdlRF, newdata = validation)
+final <- validation[, 53:54]
+t(final)
+```
+
+## Conclusion
+
+Using the random forest algorithm on the 53 features related to user motion that contained ample data for analysis yielded a $100\%$ (20/20) prediction accuracy on the validation set. While the out-of-sample error was technically lower than the in-sample error, this is most likely the case because of the small sample size of the validation set. However, the testing out-of-sample error $(99.3\%)$ is still demonstrably close to the in-sample error $(99.5\%)$, suggesting that the amount of overfitting done by the model to the training set is negligible.
+
+Accuracy could potentially be improved upon if the timestamp variables were used to conduct a time-series analysis and forecasting on the data. However, without accounting for the time-sensitivity, it appears the model trained in this report does a more than adequate job predicting form of a user doing Unilateral Dumbbell Curls.
+
+## Bibliography
+
+Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013.
+
+
